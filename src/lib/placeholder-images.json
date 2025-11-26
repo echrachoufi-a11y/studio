@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "A large container ship at a busy port during sunset.",
+      "imageUrl": "https://images.unsplash.com/photo-1670121180530-cfcba4438038?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjb250YWluZXIlMjBzaGlwfGVufDB8fHx8MTc2NDA5MzU1Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "container ship"
+    },
+    {
+      "id": "testimonial-1",
+      "description": "Portrait of a satisfied client.",
+      "imageUrl": "https://images.unsplash.com/photo-1595211877493-41a4e5f236b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9mZXNzaW9uYWwlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjQxMDg1NjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional portrait"
+    },
+    {
+      "id": "testimonial-2",
+      "description": "Portrait of another satisfied client.",
+      "imageUrl": "https://images.unsplash.com/photo-1484863137850-59afcfe05386?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NDEyMzc4M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person smiling"
+    },
+    {
+      "id": "testimonial-3",
+      "description": "Portrait of a third satisfied client.",
+      "imageUrl": "https://images.unsplash.com/photo-1573497161161-c3e73707e25c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxidXNpbmVzcyUyMHBlcnNvbnxlbnwwfHx8fDE3NjQxMjgwNjh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "business person"
+    }
+  ]
 }
