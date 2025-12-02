@@ -21,8 +21,13 @@ const services = [
 
 export function Services() {
   return (
-    <section id="services" className="w-full bg-background py-16 md:py-24">
-      <div className="container mx-auto px-4 md:px-6">
+    <section 
+      id="services" 
+      className="relative w-full bg-background py-16 md:py-24 bg-cover bg-center bg-fixed"
+      style={{backgroundImage: "url('https://images.unsplash.com/photo-1578575437130-527eed3abbec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsb2dpc3RpY3MlMjB0cnVja3N8ZW58MHx8fHwxNzE3MDM3NDU3fDA&ixlib=rb-4.0.3&q=80&w=1080')"}}
+    >
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+      <div className="container relative mx-auto px-4 md:px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-headline text-3xl font-bold tracking-tight md:text-4xl">
             Nuestra Experiencia a su Servicio
@@ -34,7 +39,7 @@ export function Services() {
 
         <div className="mt-12 grid gap-8 md:grid-cols-3">
           {services.map((service) => (
-            <Card key={service.title} className="flex flex-col overflow-hidden shadow-lg transition-transform duration-300 hover:-translate-y-2">
+            <Card key={service.title} className="flex flex-col overflow-hidden shadow-lg transition-transform duration-300 hover:-translate-y-2 bg-card/80">
               <CardHeader className="flex flex-col items-center p-6 text-center">
                 <div className="mb-4 rounded-full bg-primary/10 p-4 text-primary">
                   <service.icon className="h-10 w-10" />
