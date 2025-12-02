@@ -10,17 +10,43 @@ function CustomLogoIcon(props: SVGProps<SVGSVGElement>) {
             height="64"
             {...props}
         >
+           <defs>
+                <linearGradient id="seaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style={{stopColor: 'hsl(var(--primary))', stopOpacity: 0.8}} />
+                <stop offset="100%" style={{stopColor: 'hsl(var(--accent))', stopOpacity: 1}} />
+                </linearGradient>
+            </defs>
+            
+            {/* <!-- Ship Body --> */}
             <path 
-                d="M32 4.2c-2 0-3.8 1.4-4.2 3.3l-1.3 6.5h11l-1.3-6.5c-0.4-1.9-2.2-3.3-4.2-3.3zM14 18c-2.2 0-4 1.8-4 4s1.8 4 4 4h4.4l6.3 8.8h8.6l6.3-8.8H46c2.2 0 4-1.8 4-4s-1.8-4-4-4H14zM4.2 32c0-2 1.4-3.8 3.3-4.2l6.5-1.3v11l-6.5-1.3C5.6 35.8 4.2 34 4.2 32zM32 59.8c2 0 3.8-1.4 4.2-3.3l1.3-6.5h-11l1.3 6.5c0.4 1.9 2.2 3.3 4.2 3.3zM59.8 32c0 2-1.4 3.8-3.3 4.2l-6.5 1.3v-11l6.5 1.3c1.9 0.4 3.3 2.2 3.3 4.2zM15.1 46.2c-1.4-1.4-1.4-3.7 0-5.1l4.6-4.6h1.6l-6.2 6.2c-0.7 0.7-0.7 1.8 0 2.5l2.5 2.5c0.7 0.7 1.8 0.7 2.5 0l6.2-6.2v1.6l-4.6 4.6c-1.4 1.4-3.7 1.4-5.1 0zM48.9 46.2c1.4-1.4 1.4-3.7 0-5.1l-4.6-4.6h-1.6l6.2 6.2c0.7 0.7 0.7 1.8 0 2.5l-2.5 2.5c-0.7 0.7-1.8 0.7-2.5 0l-6.2-6.2v1.6l4.6 4.6c1.4 1.4 3.7 1.4 5.1 0zM19.7 17.8l-4.6 4.6c-1.4 1.4-1.4 3.7 0 5.1l5.1 5.1h1.6L15.6 26.4c-0.7-0.7-0.7-1.8 0-2.5l2.5-2.5c0.7-0.7 1.8-0.7 2.5 0l6.2 6.2v-1.6l-6.2-6.2c-1.4-1.4-3.7-1.4-5.1 0zM44.3 17.8l4.6 4.6c1.4 1.4 1.4 3.7 0 5.1l-5.1 5.1h-1.6l6.2-6.2c0.7-0.7 0.7-1.8 0-2.5l-2.5-2.5c-0.7-0.7-1.8-0.7-2.5 0l-6.2 6.2v-1.6l6.2-6.2c1.4-1.4 3.7-1.4 5.1 0z"
+                d="M10 38 L 54 38 L 50 48 L 14 48 Z"
                 fill="hsl(var(--primary))"
             />
+            
+            {/* <!-- Containers --> */}
+            <rect x="15" y="32" width="10" height="6" fill="hsl(var(--card))" />
+            <rect x="26" y="32" width="10" height="6" fill="hsl(var(--card))" />
+            <rect x="37" y="32" width="10" height="6" fill="hsl(var(--card))" />
+
+             {/* <!-- Bridge --> */}
             <path
-                d="M32 18c-4.4 0-8 3.6-8 8v1.4c0 1.1 0.9 2 2 2h4v8.6c0 1.1 0.9 2 2 2s2-0.9 2-2V29.4h4c1.1 0 2-0.9 2-2V26c0-4.4-3.6-8-8-8z"
-                fill="hsl(var(--accent))"
+                d="M48 32 L 48 26 L 44 26 L 44 32 Z"
+                 fill="hsl(var(--primary-foreground))"
+                 stroke="hsl(var(--primary))"
+                 strokeWidth="0.5"
             />
-             <path
-                d="M32 18c4.4 0 8 3.6 8 8v2c0 1.1-0.9 2-2 2h-6V18z"
-                fill="hsl(var(--primary-foreground))"
+            
+            {/* <!-- Sea Waves --> */}
+            <path 
+                d="M4,52 C12,44 20,56 32,52 C44,48 52,60 60,52 L60,60 L4,60 Z"
+                fill="url(#seaGradient)"
+            />
+            <path
+                 d="M4,56 C12,48 20,60 32,56 C44,52 52,64 60,56"
+                 fill="none"
+                 stroke="hsl(var(--primary-foreground))"
+                 strokeWidth="1"
+                 strokeOpacity="0.5"
             />
         </svg>
     );
