@@ -6,11 +6,11 @@ export function Logo() {
     <div className="flex items-center gap-2" aria-label="Meridian Logistics Logo">
       {/* 
         INSTRUCCIÓ: 
-        Aquest codi mostrarà la imatge 'logo.png' que has de pujar a la carpeta 'public'.
+        Aquest codi mostrarà la imatge 'descarga.png' que has de pujar a la carpeta 'public'.
         Pots ajustar 'width' i 'height' si el teu logo té altres dimensions.
       */}
       <Image 
-        src="/logo.png" 
+        src="/descarga.png" 
         alt="Meridian Logistics Logo"
         width={40} 
         height={40} 
