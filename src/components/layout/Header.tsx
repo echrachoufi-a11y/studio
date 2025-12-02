@@ -23,6 +23,7 @@ const navLinks = [
   { href: '/blog', label: 'Blog' },
   { href: '/track', label: 'Rastrear' },
   { href: '/optimize', label: 'Optimizar Ruta' },
+  { href: '/contact', label: 'Contacto' },
 ];
 
 export function Header() {
