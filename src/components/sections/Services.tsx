@@ -24,7 +24,7 @@ export function Services() {
     <section 
       id="services" 
       className="relative w-full bg-background py-16 md:py-24 bg-cover bg-center bg-fixed"
-      style={{backgroundImage: "url('https://images.unsplash.com/photo-1578575437130-527eed3abbec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsb2dpc3RpY3MlMjB0cnVja3N8ZW58MHx8fHwxNzE3MDM3NDU3fDA&ixlib=rb-4.0.3&q=80&w=1080')"}}
+      style={{backgroundImage: "url('https://images.unsplash.com/photo-1613684815333-d5398939b49f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYXJnbyUyMHNoaXB8ZW58MHx8fHwxNzE3MDM3MzUxfDA&ixlib=rb-4.0.3&q=80&w=1080')"}}
     >
         <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
       <div className="container relative mx-auto px-4 md:px-6">
