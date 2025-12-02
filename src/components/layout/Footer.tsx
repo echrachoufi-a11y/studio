@@ -18,7 +18,8 @@ const footerLinks = {
     { href: '/quote', label: 'Cotizaciones' },
   ],
   empresa: [
-    { href: '#', label: 'Sobre Nosotros' },
+    { href: '/about', label: 'Sobre Nosotros' },
+    { href: '/blog', label: 'Blog' },
     { href: '#', label: 'Carreras' },
     { href: '/contact', label: 'Contacto' },
   ],

@@ -23,6 +23,30 @@
       "description": "Portrait of a third satisfied client.",
       "imageUrl": "https://images.unsplash.com/photo-1573497161161-c3e73707e25c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxidXNpbmVzcyUyMHBlcnNvbnxlbnwwfHx8fDE3NjQxMjgwNjh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "business person"
+    },
+    {
+      "id": "about-us-hero",
+      "description": "A diverse team of professionals collaborating in a modern office.",
+      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkaXZlcnNlJTIwdGVhbSUyMG1lZXRpbmd8ZW58MHx8fHwxNzE3MDM2OTgxfDA&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "diverse team meeting"
+    },
+    {
+      "id": "blog-post-1",
+      "description": "A close-up of a customs officer stamping a passport.",
+      "imageUrl": "https://images.unsplash.com/photo-1587620962725-abab7fe55159?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzb2Z0d2FyZSUyMGRldmVsb3BtZW50fGVufDB8fHx8MTcxNzAzNzEyN3ww&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "software development"
+    },
+    {
+      "id": "blog-post-2",
+      "description": "A cargo ship being loaded with containers at a busy port.",
+      "imageUrl": "https://images.unsplash.com/photo-1611095790444-1dfa3c3e7b3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjeWJlcnNlY3VyaXR5fGVufDB8fHx8MTcxNzAzNzE1N3ww&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "cybersecurity"
+    },
+    {
+      "id": "blog-post-3",
+      "description": "A semi-truck driving on a highway at sunset.",
+      "imageUrl": "https://images.unsplash.com/photo-1555066931-4365d1469c5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb2Rpbmd8ZW58MHx8fHwxNzE3MDM3MTgxfDA&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "coding"
     }
   ]
 }
