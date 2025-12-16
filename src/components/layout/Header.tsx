@@ -21,7 +21,7 @@ const navLinks = [
   { href: '/#services', label: 'Servicios' },
   { href: '/about', label: 'Sobre Nosotros' },
   { href: '/blog', label: 'Blog' },
-  { href: '/track', label: 'Rastrear' },
+  { href: '/tracking', label: 'Seguiment' },
   { href: '/optimize', label: 'Optimizar Ruta' },
   { href: '/contact', label: 'Contacto' },
 ];
