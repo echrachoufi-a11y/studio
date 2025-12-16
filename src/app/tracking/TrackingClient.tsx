@@ -61,7 +61,7 @@ export function TrackingClient() {
     setError(null);
 
     try {
-        const response = await fetch(`https://sheetdb.io/api/v1/kltblqn245xln/search?tracking_code=${values.tracking_code}`);
+        const response = await fetch(`https://sheetdb.io/api/v1/2v03n23o1ksd9/search?tracking_code=${values.tracking_code}`);
         const data = await response.json();
 
         if (data.length > 0) {
@@ -140,7 +140,7 @@ export function TrackingClient() {
                     {currentStatus.icon}
                     <span className="font-semibold">{trackingInfo.estat}</span>
                 </div>
-                <Progress value={currentStatus.progress} className={cn("h-3", currentStatus.color)} />
+                <Progress value={currentStatus.progress} indicatorClassName={currentStatus.color} />
                 <div className="flex justify-between text-xs text-muted-foreground">
                     <span>En magatzem</span>
                     <span>En trànsit</span>
