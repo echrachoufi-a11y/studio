@@ -40,21 +40,29 @@ type TrackingInfo = {
 function normalizeTrackingData(rawData: any): TrackingInfo | null {
     if (!rawData) return null;
 
-    // Helper to find a value by checking multiple possible keys
+    // Create a lowercased version of the raw data keys for case-insensitive matching
+    const lowercasedData: { [key: string]: any } = {};
+    for (const key in rawData) {
+        lowercasedData[key.toLowerCase()] = rawData[key];
+    }
+
     const getValue = (...keys: string[]) => {
         for (const key of keys) {
-            if (rawData[key] !== undefined) return rawData[key];
+            // Check in the lowercased data
+            if (lowercasedData[key.toLowerCase()] !== undefined) {
+                return lowercasedData[key.toLowerCase()];
+            }
         }
         return 'N/A'; // Return a default value if no key is found
     };
 
     return {
         tracking_code: getValue('tracking_code', 'trackingCode', 'codi'),
-        origin: getValue('origin', 'origen', 'Origen'),
-        destination: getValue('destination', 'desti', 'Destí', 'destino'),
-        status: getValue('status', 'estat', 'Estat'),
-        location: getValue('location', 'ubicacio_actual', 'ubicacion_actual', 'Ubicació Actual'),
-        eta: getValue('eta', 'ETA', 'data_prevista', 'Data Prevista'),
+        origin: getValue('origin', 'origen'),
+        destination: getValue('destination', 'desti', 'destino'),
+        status: getValue('status', 'estat'),
+        location: getValue('location', 'ubicacio_actual'),
+        eta: getValue('eta', 'data_prevista'),
     };
 }
 
