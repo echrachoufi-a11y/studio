@@ -60,8 +60,8 @@ function normalizeTrackingData(rawData: any): TrackingInfo | null {
 
 
 const statusConfig: { [key: string]: { progress: number; color: string; icon: JSX.Element; label: string } } = {
-    'en magatzem': { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" />, label: 'En Magatzem' },
     'en transit': { progress: 50, color: 'bg-primary', icon: <Clock className="h-5 w-5" />, label: 'En Trànsit' },
+    'magatzem': { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" />, label: 'En Magatzem' },
     'lliurat': { progress: 100, color: 'bg-green-500', icon: <Package className="h-5 w-5" />, label: 'Lliurat' },
 };
 
@@ -100,7 +100,8 @@ export function TrackingClient() {
     }
   }
 
-  const currentStatusConfig = trackingInfo?.status ? statusConfig[trackingInfo.status.toLowerCase()] : null;
+  const currentStatusKey = trackingInfo?.status?.toLowerCase();
+  const currentStatusConfig = currentStatusKey ? statusConfig[currentStatusKey] : null;
 
   return (
     <>
