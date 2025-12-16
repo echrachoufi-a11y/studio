@@ -44,9 +44,7 @@ export function LoginForm() {
       const response = await fetch(url);
 
       if (!response.ok) {
-        setError('Error en la connexió amb el servidor. Intenta-ho de nou més tard.');
-        setLoading(false);
-        return;
+        throw new Error('Error en la connexió amb el servidor.');
       }
 
       const allUsers = await response.json();
@@ -59,7 +57,10 @@ export function LoginForm() {
       );
 
       if (foundUser) {
-        localStorage.setItem('userData', JSON.stringify({ nom: foundUser.nom, empresa: foundUser.empresa }));
+        // Correctly get nom and empresa from the found user object
+        const nom = foundUser.nom || 'Usuari';
+        const empresa = foundUser.empresa || 'N/A';
+        localStorage.setItem('userData', JSON.stringify({ nom, empresa }));
         router.push('/dashboard');
       } else {
         setError('Dades incorrectes. Si us plau, verifica el teu usuari i contrasenya.');
@@ -67,7 +68,8 @@ export function LoginForm() {
 
     } catch (e) {
       console.error(e);
-      setError('Hi ha hagut un problema de connexió. Intenta-ho de nou més tard.');
+      const errorMessage = e instanceof Error ? e.message : 'Hi ha hagut un problema de connexió. Intenta-ho de nou més tard.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
