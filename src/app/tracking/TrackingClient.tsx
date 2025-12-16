@@ -17,7 +17,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const formSchema = z.object({
@@ -37,14 +36,17 @@ type TrackingInfo = {
 
 // Function to normalize the raw data from the API, making it case-insensitive
 function normalizeTrackingData(rawData: any): TrackingInfo | null {
-    if (!rawData) return null;
+    if (!rawData || typeof rawData !== 'object') return null;
 
-    // Create a lowercased version of the raw data keys for case-insensitive matching
+    // Create a new object with all keys converted to lowercase
     const lowercasedData: { [key: string]: any } = {};
     for (const key in rawData) {
-        lowercasedData[key.toLowerCase()] = rawData[key];
+        if (Object.prototype.hasOwnProperty.call(rawData, key)) {
+            lowercasedData[key.toLowerCase()] = rawData[key];
+        }
     }
 
+    // Now access the properties using the lowercase keys
     return {
         tracking_code: lowercasedData['tracking_code'] || 'N/A',
         origin: lowercasedData['origin'] || 'N/A',
