@@ -30,15 +30,15 @@ type TrackingInfo = {
     tracking_code: string;
     origin: string;
     destination: string;
-    status: 'En transit' | 'Magatzem' | 'Lliurat';
+    status: string;
     location: string;
     eta: string;
 };
 
-const statusConfig = {
-    'Magatzem': { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" />, label: 'En Magatzem' },
-    'En transit': { progress: 50, color: 'bg-primary', icon: <Clock className="h-5 w-5" />, label: 'En Trànsit' },
-    'Lliurat': { progress: 100, color: 'bg-green-500', icon: <Package className="h-5 w-5" />, label: 'Lliurat' },
+const statusConfig: { [key: string]: { progress: number; color: string; icon: JSX.Element; label: string } } = {
+    magatzem: { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" />, label: 'En Magatzem' },
+    'en transit': { progress: 50, color: 'bg-primary', icon: <Clock className="h-5 w-5" />, label: 'En Trànsit' },
+    lliurat: { progress: 100, color: 'bg-green-500', icon: <Package className="h-5 w-5" />, label: 'Lliurat' },
 };
 
 
@@ -75,7 +75,7 @@ export function TrackingClient() {
     }
   }
 
-  const currentStatusConfig = trackingInfo?.status ? statusConfig[trackingInfo.status] : null;
+  const currentStatusConfig = trackingInfo?.status ? statusConfig[trackingInfo.status.toLowerCase()] : null;
 
   return (
     <>
