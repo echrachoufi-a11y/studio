@@ -40,9 +40,9 @@ export function LoginForm() {
     const { usuari, password } = data;
 
     try {
-      const response = await fetch(
-        `https://sheetdb.io/api/v1/kymb6tvlvb694/search?sheet=usuaris&usuari=${encodeURIComponent(usuari)}&password=${encodeURIComponent(password)}`
-      );
+      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694/search?sheet=usuaris&usuari=${encodeURIComponent(usuari)}&password=${encodeURIComponent(password)}&casesensitive=false`;
+
+      const response = await fetch(url);
 
       if (!response.ok) {
         setError('Error en la connexió amb el servidor. Intenta-ho de nou més tard.');
