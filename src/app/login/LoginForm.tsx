@@ -45,7 +45,9 @@ export function LoginForm() {
       );
 
       if (!response.ok) {
-        throw new Error('Error en la connexió amb el servidor.');
+        setError('Error en la connexió amb el servidor. Intenta-ho de nou més tard.');
+        setLoading(false);
+        return;
       }
 
       const result = await response.json();
