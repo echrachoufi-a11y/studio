@@ -1,7 +1,7 @@
 import { TrackingClient } from './TrackingClient';
 
 export const metadata = {
-  title: 'Seguiment d'Enviaments | Meridian Logistics',
+  title: "Seguiment d'Enviaments | Meridian Logistics",
   description: 'Localitza el teu enviament en temps real i coneix el seu estat actual.',
 };
 
