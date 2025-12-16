@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const loginSchema = z.object({
-  username: z.string().min(1, { message: 'El nom d\'usuari és obligatori.' }),
+  usuari: z.string().min(1, { message: "L'usuari és obligatori." }),
   password: z.string().min(1, { message: 'La contrasenya és obligatòria.' }),
 });
 
@@ -37,11 +37,11 @@ export function LoginForm() {
     setLoading(true);
     setError(null);
 
-    const { username, password } = data;
+    const { usuari, password } = data;
 
     try {
       const response = await fetch(
-        `https://sheetdb.io/api/v1/kltblqn245xln/search?sheet=usuaris&usuari=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        `https://sheetdb.io/api/v1/kltblqn245xln/search?sheet=usuaris&usuari=${encodeURIComponent(usuari)}&password=${encodeURIComponent(password)}`
       );
 
       if (!response.ok) {
@@ -82,14 +82,14 @@ export function LoginForm() {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="username">Usuari</Label>
+            <Label htmlFor="usuari">Usuari</Label>
             <Input
-              id="username"
+              id="usuari"
               type="text"
               placeholder="El teu nom d'usuari"
-              {...register('username')}
+              {...register('usuari')}
             />
-            {errors.username && <p className="text-sm text-destructive">{errors.username.message}</p>}
+            {errors.usuari && <p className="text-sm text-destructive">{errors.usuari.message}</p>}
           </div>
 
           <div className="space-y-2">
