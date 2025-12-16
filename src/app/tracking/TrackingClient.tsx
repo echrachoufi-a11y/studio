@@ -27,19 +27,18 @@ const formSchema = z.object({
 type TrackFormValues = z.infer<typeof formSchema>;
 
 type TrackingInfo = {
-    id: string;
     tracking_code: string;
-    origen: string;
-    desti: string;
-    estat: 'En magatzem' | 'En trànsit' | 'Lliurat';
-    ubicacio_actual: string;
+    origin: string;
+    destination: string;
+    status: 'En transit' | 'Magatzem' | 'Lliurat';
+    location: string;
     eta: string;
 };
 
 const statusConfig = {
-    'En magatzem': { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" /> },
-    'En trànsit': { progress: 50, color: 'bg-primary', icon: <Clock className="h-5 w-5" /> },
-    'Lliurat': { progress: 100, color: 'bg-green-500', icon: <Package className="h-5 w-5" /> },
+    'Magatzem': { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" />, label: 'En Magatzem' },
+    'En transit': { progress: 50, color: 'bg-primary', icon: <Clock className="h-5 w-5" />, label: 'En Trànsit' },
+    'Lliurat': { progress: 100, color: 'bg-green-500', icon: <Package className="h-5 w-5" />, label: 'Lliurat' },
 };
 
 
@@ -76,7 +75,7 @@ export function TrackingClient() {
     }
   }
 
-  const currentStatus = trackingInfo?.estat ? statusConfig[trackingInfo.estat] : null;
+  const currentStatusConfig = trackingInfo?.status ? statusConfig[trackingInfo.status] : null;
 
   return (
     <>
@@ -125,7 +124,7 @@ export function TrackingClient() {
         </Alert>
       )}
 
-      {trackingInfo && currentStatus && (
+      {trackingInfo && currentStatusConfig && (
         <Card className="mt-8 animate-in fade-in-50 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
@@ -137,13 +136,13 @@ export function TrackingClient() {
           <CardContent className="space-y-6">
             <div className='space-y-3'>
                 <div className="flex items-center gap-2 text-lg">
-                    {currentStatus.icon}
-                    <span className="font-semibold">{trackingInfo.estat}</span>
+                    {currentStatusConfig.icon}
+                    <span className="font-semibold">{currentStatusConfig.label}</span>
                 </div>
-                <Progress value={currentStatus.progress} indicatorClassName={currentStatus.color} />
+                <Progress value={currentStatusConfig.progress} indicatorClassName={currentStatusConfig.color} />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>En magatzem</span>
-                    <span>En trànsit</span>
+                    <span>Magatzem</span>
+                    <span>En Trànsit</span>
                     <span>Lliurat</span>
                 </div>
             </div>
@@ -153,7 +152,7 @@ export function TrackingClient() {
                 <MapPin className="h-8 w-8 text-primary"/>
                 <div>
                   <p className="text-sm text-muted-foreground">Ubicació Actual</p>
-                  <p className="font-semibold">{trackingInfo.ubicacio_actual}</p>
+                  <p className="font-semibold">{trackingInfo.location}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 rounded-lg bg-background p-4">
@@ -167,14 +166,14 @@ export function TrackingClient() {
                 <Package className="h-8 w-8 text-primary"/>
                 <div>
                   <p className="text-sm text-muted-foreground">Origen</p>
-                  <p className="font-semibold">{trackingInfo.origen}</p>
+                  <p className="font-semibold">{trackingInfo.origin}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 rounded-lg bg-background p-4">
                 <Package className="h-8 w-8 text-primary"/>
                 <div>
                   <p className="text-sm text-muted-foreground">Destí</p>
-                  <p className="font-semibold">{trackingInfo.desti}</p>
+                  <p className="font-semibold">{trackingInfo.destination}</p>
                 </div>
               </div>
             </div>
