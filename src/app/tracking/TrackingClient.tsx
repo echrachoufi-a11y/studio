@@ -36,9 +36,9 @@ type TrackingInfo = {
 };
 
 const statusConfig: { [key: string]: { progress: number; color: string; icon: JSX.Element; label: string } } = {
-    magatzem: { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" />, label: 'En Magatzem' },
+    'en magatzem': { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" />, label: 'En Magatzem' },
     'en transit': { progress: 50, color: 'bg-primary', icon: <Clock className="h-5 w-5" />, label: 'En Trànsit' },
-    lliurat: { progress: 100, color: 'bg-green-500', icon: <Package className="h-5 w-5" />, label: 'Lliurat' },
+    'lliurat': { progress: 100, color: 'bg-green-500', icon: <Package className="h-5 w-5" />, label: 'Lliurat' },
 };
 
 
