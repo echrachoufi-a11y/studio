@@ -26,7 +26,6 @@ const formSchema = z.object({
 
 type TrackFormValues = z.infer<typeof formSchema>;
 
-// The structure we expect internally
 type TrackingInfo = {
     tracking_code: string;
     origin: string;
@@ -36,7 +35,7 @@ type TrackingInfo = {
     eta: string;
 };
 
-// Function to normalize the raw data from the API
+// Function to normalize the raw data from the API, making it case-insensitive
 function normalizeTrackingData(rawData: any): TrackingInfo | null {
     if (!rawData) return null;
 
@@ -46,23 +45,13 @@ function normalizeTrackingData(rawData: any): TrackingInfo | null {
         lowercasedData[key.toLowerCase()] = rawData[key];
     }
 
-    const getValue = (...keys: string[]) => {
-        for (const key of keys) {
-            // Check in the lowercased data
-            if (lowercasedData[key.toLowerCase()] !== undefined) {
-                return lowercasedData[key.toLowerCase()];
-            }
-        }
-        return 'N/A'; // Return a default value if no key is found
-    };
-
     return {
-        tracking_code: getValue('tracking_code', 'trackingCode', 'codi'),
-        origin: getValue('origin', 'origen'),
-        destination: getValue('destination', 'desti', 'destino'),
-        status: getValue('status', 'estat'),
-        location: getValue('location', 'ubicacio_actual'),
-        eta: getValue('eta', 'data_prevista'),
+        tracking_code: lowercasedData['tracking_code'] || 'N/A',
+        origin: lowercasedData['origin'] || 'N/A',
+        destination: lowercasedData['destination'] || 'N/A',
+        status: lowercasedData['status'] || 'N/A',
+        location: lowercasedData['location'] || 'N/A',
+        eta: lowercasedData['eta'] || 'N/A',
     };
 }
 
@@ -108,7 +97,7 @@ export function TrackingClient() {
     }
   }
 
-  const currentStatusKey = trackingInfo?.status?.toLowerCase();
+  const currentStatusKey = trackingInfo?.status?.toLowerCase().trim();
   const currentStatusConfig = currentStatusKey ? statusConfig[currentStatusKey] : null;
 
   return (
