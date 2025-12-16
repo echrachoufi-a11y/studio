@@ -1,11 +1,11 @@
-import { TrackingClient } from './TrackingClient';
+import { SeguimientoClient } from './SeguimientoClient';
 
 export const metadata = {
   title: "Seguiment d'Enviaments | Meridian Logistics",
   description: 'Localitza el teu enviament en temps real i coneix el seu estat actual.',
 };
 
-export default function TrackingPage() {
+export default function SeguimientoPage() {
   return (
     <div className="w-full bg-background py-16 md:py-24">
       <div className="container mx-auto px-4 md:px-6">
@@ -19,7 +19,7 @@ export default function TrackingPage() {
         </div>
 
         <div className="mx-auto mt-12 max-w-2xl">
-          <TrackingClient />
+          <SeguimientoClient />
         </div>
       </div>
     </div>

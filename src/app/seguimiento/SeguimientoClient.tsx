@@ -34,15 +34,16 @@ type TrackingInfo = {
     eta: string;
 };
 
-// Function to normalize the raw data from the API, making it case-insensitive
+// This function normalizes the raw data from the API, making it case-insensitive
+// and flexible with column names.
 function normalizeTrackingData(rawData: any): TrackingInfo | null {
     if (!rawData || typeof rawData !== 'object') return null;
 
-    // Create a new object with all keys converted to lowercase
+    // Create a new object with all keys converted to lowercase for consistent access
     const lowercasedData: { [key: string]: any } = {};
     for (const key in rawData) {
         if (Object.prototype.hasOwnProperty.call(rawData, key)) {
-            lowercasedData[key.toLowerCase()] = rawData[key];
+            lowercasedData[key.toLowerCase().trim()] = rawData[key];
         }
     }
 
@@ -65,7 +66,7 @@ const statusConfig: { [key: string]: { progress: number; color: string; icon: JS
 };
 
 
-export function TrackingClient() {
+export function SeguimientoClient() {
   const [loading, setLoading] = useState(false);
   const [trackingInfo, setTrackingInfo] = useState<TrackingInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
