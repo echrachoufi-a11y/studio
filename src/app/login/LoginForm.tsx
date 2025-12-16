@@ -41,7 +41,7 @@ export function LoginForm() {
 
     try {
       const response = await fetch(
-        `https://sheetdb.io/api/v1/kltblqn245xln/search?sheet=usuaris&usuari=${encodeURIComponent(username)}&contrasenya=${encodeURIComponent(password)}`
+        `https://sheetdb.io/api/v1/kltblqn245xln/search?sheet=usuaris&usuari=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
       );
 
       if (!response.ok) {
