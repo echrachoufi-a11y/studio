@@ -37,11 +37,11 @@ export function LoginForm() {
     setLoading(true);
     setError(null);
 
-    const { usuari, password } = data;
+    const { usuari: inputUsuari, password: inputPassword } = data;
 
     try {
-      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694/search?sheet=usuaris&usuari=${encodeURIComponent(usuari)}`;
-
+      // Fetch all users instead of searching
+      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usuaris`;
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -50,23 +50,22 @@ export function LoginForm() {
         return;
       }
 
-      const result = await response.json();
+      const allUsers = await response.json();
 
-      if (result.length > 0) {
-        // We found a user, now check password
-        const user = result[0];
-        if (user.password === password) {
-            // Correct password, save data and redirect
-            localStorage.setItem('userData', JSON.stringify({ nom: user.nom, empresa: user.empresa }));
-            router.push('/dashboard');
-        } else {
-            // Incorrect password
-            setError('Dades incorrectes. Si us plau, verifica el teu usuari i contrasenya.');
-        }
+      // Find the user in the returned array
+      const foundUser = allUsers.find(
+        (user: any) => user.usuari === inputUsuari && user.password === inputPassword
+      );
+
+      if (foundUser) {
+        // User found and password matches, save data and redirect
+        localStorage.setItem('userData', JSON.stringify({ nom: foundUser.nom, empresa: foundUser.empresa }));
+        router.push('/dashboard');
       } else {
-        // User not found
+        // User not found or password incorrect
         setError('Dades incorrectes. Si us plau, verifica el teu usuari i contrasenya.');
       }
+
     } catch (e) {
       console.error(e);
       setError('Hi ha hagut un problema de connexió. Intenta-ho de nou més tard.');
