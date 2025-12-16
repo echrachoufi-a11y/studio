@@ -40,7 +40,7 @@ export function LoginForm() {
     const { usuari: inputUsuari, password: inputPassword } = data;
 
     try {
-      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usuaris`;
+      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usurais`;
       const response = await fetch(url);
 
       if (!response.ok) {
