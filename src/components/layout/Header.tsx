@@ -66,6 +66,9 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <Button variant="ghost" asChild>
+            <Link href="/login">Login</Link>
+          </Button>
           <Button asChild>
             <Link href="/quote">Solicitar Cotización</Link>
           </Button>
@@ -97,7 +100,10 @@ export function Header() {
                     {link.label}
                   </Link>
                 ))}
-                <Button asChild size="lg" className="mt-4">
+                <Button asChild size="lg" className="mt-4" variant="outline">
+                   <Link href="/login">Login</Link>
+                </Button>
+                <Button asChild size="lg" className="mt-2">
                   <Link href="/quote">Solicitar Cotización</Link>
                 </Button>
               </nav>
