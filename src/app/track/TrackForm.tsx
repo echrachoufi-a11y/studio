@@ -20,7 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
-  trackingNumber: z.string().min(5, 'El número de seguimiento es demasiado corto.'),
+  trackingNumber: z.string().min(3, 'El número de seguimiento es demasiado corto.'),
 });
 
 type TrackFormValues = z.infer<typeof formSchema>;
@@ -45,6 +45,16 @@ const mockTrackingData: Record<string, TrackingInfo> = {
             { date: '15 de Julio, 2024', status: 'En el puerto de origen', location: 'Shanghai, China' },
             { date: '17 de Julio, 2024', status: 'Embarcado', location: 'Shanghai, China' },
             { date: '20 de Julio, 2024', status: 'En tránsito marítimo', location: 'Mar de China Meridional' },
+        ],
+    },
+    'EC-2001': {
+        status: 'Lliurat',
+        location: 'Barcelona, Espanya',
+        estimatedDelivery: '20 de Juliol, 2024',
+        history: [
+            { date: '18 de Juliol, 2024', status: 'En magatzem', location: 'Barcelona, Espanya' },
+            { date: '19 de Juliol, 2024', status: 'En trànsit', location: 'Àrea metropolitana de Barcelona' },
+            { date: '20 de Juliol, 2024', status: 'Lliurat', location: 'Adreça del destinatari' },
         ],
     },
 };
@@ -90,7 +100,7 @@ export function TrackForm() {
                   <FormItem className="flex-grow">
                     <FormLabel>Número de Seguimiento</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ej: ML12345" {...field} />
+                      <Input placeholder="Ej: ML12345 o EC-2001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
