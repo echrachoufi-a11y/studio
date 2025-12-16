@@ -26,6 +26,7 @@ const formSchema = z.object({
 
 type TrackFormValues = z.infer<typeof formSchema>;
 
+// The structure we expect internally
 type TrackingInfo = {
     tracking_code: string;
     origin: string;
@@ -34,6 +35,29 @@ type TrackingInfo = {
     location: string;
     eta: string;
 };
+
+// Function to normalize the raw data from the API
+function normalizeTrackingData(rawData: any): TrackingInfo | null {
+    if (!rawData) return null;
+
+    // Helper to find a value by checking multiple possible keys
+    const getValue = (...keys: string[]) => {
+        for (const key of keys) {
+            if (rawData[key] !== undefined) return rawData[key];
+        }
+        return 'N/A'; // Return a default value if no key is found
+    };
+
+    return {
+        tracking_code: getValue('tracking_code', 'trackingCode', 'codi'),
+        origin: getValue('origin', 'origen', 'Origen'),
+        destination: getValue('destination', 'desti', 'Destí', 'destino'),
+        status: getValue('status', 'estat', 'Estat'),
+        location: getValue('location', 'ubicacio_actual', 'ubicacion_actual', 'Ubicació Actual'),
+        eta: getValue('eta', 'ETA', 'data_prevista', 'Data Prevista'),
+    };
+}
+
 
 const statusConfig: { [key: string]: { progress: number; color: string; icon: JSX.Element; label: string } } = {
     'en magatzem': { progress: 10, color: 'bg-yellow-500', icon: <Anchor className="h-5 w-5" />, label: 'En Magatzem' },
@@ -64,7 +88,8 @@ export function TrackingClient() {
         const data = await response.json();
 
         if (data.length > 0) {
-            setTrackingInfo(data[0]);
+            const normalizedData = normalizeTrackingData(data[0]);
+            setTrackingInfo(normalizedData);
         } else {
             setError('Codi no trobat. Si us plau, verifica el codi i torna a intentar-ho.');
         }
