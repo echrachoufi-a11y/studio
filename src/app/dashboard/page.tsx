@@ -7,7 +7,6 @@ import { Building, User, LogOut, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Skeleton } from '@/components/ui/skeleton';
 
 interface UserData {
   nom: string;
@@ -73,9 +72,9 @@ export default function DashboardPage() {
                         <AvatarFallback>{getInitials(userData.nom)}</AvatarFallback>
                     </Avatar>
                 </div>
-              <CardTitle className="text-3xl font-bold">{userData.nom}</CardTitle>
+              <CardTitle className="text-3xl font-bold">Benvingut a la teva zona privada, {userData.nom}</CardTitle>
               <CardDescription className="text-lg text-muted-foreground">
-                Benvingut al teu panell de control
+                Aquest és el teu panell de control personalitzat.
               </CardDescription>
             </CardHeader>
             <CardContent className="mt-4 space-y-6">
@@ -93,7 +92,7 @@ export default function DashboardPage() {
                   <p className="font-semibold">{userData.nom}</p>
                 </div>
               </div>
-              <Button onClick={handleLogout} variant="outline" className="w-full">
+              <Button onClick={handleLogout} variant="destructive" className="w-full">
                 <LogOut className="mr-2 h-4 w-4" />
                 Tancar Sessió
               </Button>
