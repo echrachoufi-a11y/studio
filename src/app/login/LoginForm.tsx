@@ -40,7 +40,6 @@ export function LoginForm() {
     const { usuari: inputUsuari, password: inputPassword } = data;
 
     try {
-      // Fetch all users instead of searching
       const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usuaris`;
       const response = await fetch(url);
 
@@ -51,18 +50,18 @@ export function LoginForm() {
       }
 
       const allUsers = await response.json();
-
-      // Find the user in the returned array
+      
       const foundUser = allUsers.find(
-        (user: any) => user.usuari === inputUsuari && user.password === inputPassword
+        (user: any) => 
+            user.usuari && user.password &&
+            user.usuari.toString().trim().toLowerCase() === inputUsuari.trim().toLowerCase() &&
+            user.password.toString().trim() === inputPassword.trim()
       );
 
       if (foundUser) {
-        // User found and password matches, save data and redirect
         localStorage.setItem('userData', JSON.stringify({ nom: foundUser.nom, empresa: foundUser.empresa }));
         router.push('/dashboard');
       } else {
-        // User not found or password incorrect
         setError('Dades incorrectes. Si us plau, verifica el teu usuari i contrasenya.');
       }
 
