@@ -10,7 +10,7 @@ import { Loader2, LogIn, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const loginSchema = z.object({
@@ -41,7 +41,7 @@ export function LoginForm() {
 
     try {
       const response = await fetch(
-        `https://sheetdb.io/api/v1/kltblqn245xln/search?sheet=usuaris&usuari=${encodeURIComponent(usuari)}&password=${encodeURIComponent(password)}`
+        `https://sheetdb.io/api/v1/kymb6tvlvb694/search?sheet=usuaris&usuari=${encodeURIComponent(usuari)}&password=${encodeURIComponent(password)}`
       );
 
       if (!response.ok) {
