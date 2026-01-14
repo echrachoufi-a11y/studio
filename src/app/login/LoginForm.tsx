@@ -57,7 +57,6 @@ export function LoginForm() {
       );
 
       if (foundUser) {
-        // Correctly get nom and empresa from the found user object
         const nom = foundUser.nom || 'Usuari';
         const empresa = foundUser.empresa || 'N/A';
         localStorage.setItem('userData', JSON.stringify({ nom, empresa }));
