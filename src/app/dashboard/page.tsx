@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Building, User, LogOut, Loader2 } from 'lucide-react';
+import { Building, User, LogOut, Loader2, FileText } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -93,6 +94,12 @@ export default function DashboardPage() {
                   <p className="font-semibold">{userData.nom}</p>
                 </div>
               </div>
+              <Button asChild className="w-full" variant="secondary">
+                <Link href="/documents">
+                    <FileText className="mr-2 h-4 w-4" />
+                    Veure els meus documents
+                </Link>
+              </Button>
               <Button onClick={handleLogout} variant="destructive" className="w-full">
                 <LogOut className="mr-2 h-4 w-4" />
                 Tancar Sessió
