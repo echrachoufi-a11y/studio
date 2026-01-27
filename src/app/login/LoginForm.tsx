@@ -20,6 +20,21 @@ const loginSchema = z.object({
 
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
+// Helper function to normalize keys from the API response
+function normalizeUserData(rawData: any): any | null {
+    if (!rawData || typeof rawData !== 'object') return null;
+
+    const normalizedData: { [key: string]: any } = {};
+    for (const key in rawData) {
+        if (Object.prototype.hasOwnProperty.call(rawData, key)) {
+            const trimmedKey = key.trim().toLowerCase();
+            normalizedData[trimmedKey] = rawData[key];
+        }
+    }
+    return normalizedData;
+}
+
+
 export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,8 +63,9 @@ export function LoginForm() {
       }
 
       const allUsers = await response.json();
+      const normalizedUsers = allUsers.map(normalizeUserData).filter(Boolean);
       
-      const foundUser = allUsers.find(
+      const foundUser = normalizedUsers.find(
         (user: any) => 
             user.usuari && user.password &&
             user.usuari.toString().trim().toLowerCase() === inputUsuari.trim().toLowerCase() &&
