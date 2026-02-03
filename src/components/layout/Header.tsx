@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -14,22 +15,31 @@ import {
 } from '@/components/ui/sheet';
 import { Logo } from '@/components/Logo';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const navLinks = [
-  { href: '/', label: 'Inicio' },
-  { href: '/#services', label: 'Servicios' },
-  { href: '/about', label: 'Sobre Nosotros' },
+  { href: '/', label: 'Inici' },
+  { href: '/#services', label: 'Serveis' },
+  { href: '/about', label: 'Sobre Nosaltres' },
   { href: '/blog', label: 'Blog' },
-  { href: '/seguimiento', label: 'Seguimiento' },
-  { href: '/optimize', label: 'Optimizar Ruta' },
-  { href: '/contact', label: 'Contacto' },
+  { href: '/seguimiento', label: 'Seguiment' },
+  { href: '/optimize', label: 'Optimitzar Ruta' },
+  { href: '/contact', label: 'Contacte' },
 ];
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [userData, setUserData] = useState<{ nom: string; empresa: string } | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,7 +51,24 @@ export function Header() {
   
   useEffect(() => {
     setIsMenuOpen(false);
-  }, [pathname])
+    // Refresh user data from localStorage on every navigation
+    const stored = localStorage.getItem('userData');
+    if (stored) {
+      try {
+        setUserData(JSON.parse(stored));
+      } catch (e) {
+        setUserData(null);
+      }
+    } else {
+      setUserData(null);
+    }
+  }, [pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('userData');
+    setUserData(null);
+    router.push('/');
+  };
 
   return (
     <header
@@ -51,7 +78,7 @@ export function Header() {
       )}
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/" aria-label="Volver al inicio">
+        <Link href="/" aria-label="Tornar a l'inici">
           <Logo />
         </Link>
 
@@ -66,26 +93,61 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <Button variant="ghost" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/quote">Solicitar Cotización</Link>
-          </Button>
+          
+          {userData ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2 border-primary/20 bg-primary/5">
+                  <User className="h-4 w-4" />
+                  <span className="max-w-[100px] truncate">{userData.nom}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>El meu compte</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="cursor-pointer">
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    Àrea de Client
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/documents" className="cursor-pointer">
+                    <Menu className="mr-2 h-4 w-4" />
+                    Les meves Factures
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Tancar Sessió
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="ghost" asChild>
+                <Link href="/login">Accés</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/quote">Sol·licitar Cotització</Link>
+              </Button>
+            </>
+          )}
         </nav>
 
         {/* Mobile Navigation */}
         <div className="md:hidden">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Abrir menú">
+              <Button variant="ghost" size="icon" aria-label="Obrir menú">
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px]">
               <SheetHeader>
                 <SheetTitle className="text-left">
-                  <Link href="/" aria-label="Volver al inicio">
+                  <Link href="/" aria-label="Tornar a l'inici">
                     <Logo />
                   </Link>
                 </SheetTitle>
@@ -100,12 +162,26 @@ export function Header() {
                     {link.label}
                   </Link>
                 ))}
-                <Button asChild size="lg" className="mt-4" variant="outline">
-                   <Link href="/login">Login</Link>
-                </Button>
-                <Button asChild size="lg" className="mt-2">
-                  <Link href="/quote">Solicitar Cotización</Link>
-                </Button>
+                
+                {userData ? (
+                   <>
+                    <Button asChild variant="outline" className="justify-start">
+                      <Link href="/dashboard">Àrea de Client ({userData.nom})</Link>
+                    </Button>
+                    <Button onClick={handleLogout} variant="destructive">
+                      Tancar Sessió
+                    </Button>
+                   </>
+                ) : (
+                  <>
+                    <Button asChild size="lg" className="mt-4" variant="outline">
+                       <Link href="/login">Accés Usuaris</Link>
+                    </Button>
+                    <Button asChild size="lg" className="mt-2">
+                      <Link href="/quote">Sol·licitar Cotització</Link>
+                    </Button>
+                  </>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

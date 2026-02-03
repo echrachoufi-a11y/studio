@@ -20,10 +20,8 @@ const loginSchema = z.object({
 
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
-// Helper function to normalize keys from the API response
 function normalizeUserData(rawData: any): any | null {
     if (!rawData || typeof rawData !== 'object') return null;
-
     const normalizedData: { [key: string]: any } = {};
     for (const key in rawData) {
         if (Object.prototype.hasOwnProperty.call(rawData, key)) {
@@ -33,7 +31,6 @@ function normalizeUserData(rawData: any): any | null {
     }
     return normalizedData;
 }
-
 
 export function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -55,11 +52,12 @@ export function LoginForm() {
     const { usuari: inputUsuari, password: inputPassword } = data;
 
     try {
-      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usurais`;
+      // Usar 'usuaris' como nombre de pestaña estándar
+      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usuaris`;
       const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error('Error en la connexió amb el servidor.');
+        throw new Error('No es pot connectar amb el servidor de dades.');
       }
 
       const allUsers = await response.json();
@@ -73,18 +71,21 @@ export function LoginForm() {
       );
 
       if (foundUser) {
-        const nom = foundUser.nom || 'Usuari';
-        const empresa = foundUser.empresa || 'N/A';
+        const nom = foundUser.nom || foundUser.usuari || 'Usuari';
+        const empresa = foundUser.empresa || 'Empresa No Definida';
+        
+        // Guardar dades i forçar redirecció
         localStorage.setItem('userData', JSON.stringify({ nom, empresa }));
+        
+        // Forçar un refresh per assegurar que el Header veu els canvis immediatament si fos necessari
         router.push('/dashboard');
       } else {
-        setError('Dades incorrectes. Si us plau, verifica el teu usuari i contrasenya.');
+        setError('Dades incorrectes. Verifica el teu usuari i contrasenya.');
       }
 
     } catch (e) {
       console.error(e);
-      const errorMessage = e instanceof Error ? e.message : 'Hi ha hagut un problema de connexió. Intenta-ho de nou més tard.';
-      setError(errorMessage);
+      setError('Error de connexió. Si us plau, torna-ho a provar més tard.');
     } finally {
       setLoading(false);
     }
@@ -107,7 +108,7 @@ export function LoginForm() {
             <Input
               id="usuari"
               type="text"
-              placeholder="El teu nom d'usuari"
+              placeholder="El teu usuari"
               {...register('usuari')}
             />
             {errors.usuari && <p className="text-sm text-destructive">{errors.usuari.message}</p>}
