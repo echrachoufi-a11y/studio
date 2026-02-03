@@ -49,11 +49,12 @@ export function LoginForm() {
     setLoading(true);
     setError(null);
 
-    const { usuari: inputUsuari, password: inputPassword } = data;
+    const inputUsuari = data.usuari.trim().toLowerCase();
+    const inputPassword = data.password.trim();
 
     try {
-      // Usar 'usuaris' como nombre de pestaña estándar
-      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usuaris`;
+      // S'utilitza la pestanya 'usurais' segons la configuració del client
+      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usurais`;
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -66,18 +67,15 @@ export function LoginForm() {
       const foundUser = normalizedUsers.find(
         (user: any) => 
             user.usuari && user.password &&
-            user.usuari.toString().trim().toLowerCase() === inputUsuari.trim().toLowerCase() &&
-            user.password.toString().trim() === inputPassword.trim()
+            user.usuari.toString().trim().toLowerCase() === inputUsuari &&
+            user.password.toString().trim() === inputPassword
       );
 
       if (foundUser) {
         const nom = foundUser.nom || foundUser.usuari || 'Usuari';
         const empresa = foundUser.empresa || 'Empresa No Definida';
         
-        // Guardar dades i forçar redirecció
         localStorage.setItem('userData', JSON.stringify({ nom, empresa }));
-        
-        // Forçar un refresh per assegurar que el Header veu els canvis immediatament si fos necessari
         router.push('/dashboard');
       } else {
         setError('Dades incorrectes. Verifica el teu usuari i contrasenya.');
@@ -85,7 +83,7 @@ export function LoginForm() {
 
     } catch (e) {
       console.error(e);
-      setError('Error de connexió. Si us plau, torna-ho a provar més tard.');
+      setError('Error de connexió amb el servidor. Intenta-ho de nou més tard.');
     } finally {
       setLoading(false);
     }

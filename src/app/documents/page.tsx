@@ -100,17 +100,21 @@ export default function DocumentsPage() {
       setLoading(true);
       setError(null);
       try {
+        // S'utilitzen les pestanyes 'usurais' i 'documents' segons la configuració del client
         const [usersRes, documentsRes] = await Promise.all([
-          fetch('https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usuaris'),
+          fetch('https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usurais'),
           fetch('https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=documents')
         ]);
 
         if (!usersRes.ok || !documentsRes.ok) {
-          throw new Error('Error al connectar amb la base de dades.');
+          throw new Error('Error al connectar amb la base de dades. Revisa el nom de les pestanyes.');
         }
 
-        const usersData = (await usersRes.json()).map(normalizeKeys);
-        const documentsData = (await documentsRes.json()).map(normalizeKeys);
+        const rawUsers = await usersRes.json();
+        const rawDocuments = await documentsRes.json();
+
+        const usersData = rawUsers.map(normalizeKeys);
+        const documentsData = rawDocuments.map(normalizeKeys);
         
         setAllUsers(usersData);
         setAllDocuments(documentsData);
@@ -138,10 +142,12 @@ export default function DocumentsPage() {
 
     const invoicesMap = new Map<string, DocumentLine[]>();
     filteredDocs.forEach(line => {
-      if (!invoicesMap.has(line.num_factura)) {
-        invoicesMap.set(line.num_factura, []);
+      if (line.num_factura) {
+        if (!invoicesMap.has(line.num_factura)) {
+          invoicesMap.set(line.num_factura, []);
+        }
+        invoicesMap.get(line.num_factura)!.push(line);
       }
-      invoicesMap.get(line.num_factura)!.push(line);
     });
 
     const result: ProcessedInvoice[] = [];
@@ -152,10 +158,10 @@ export default function DocumentsPage() {
       const vatMap = new Map<number, { base: number; amount: number }>();
 
       const processedLines = lines.map(line => {
-        const unitPrice = parseFloat(line.preu_unitari) || 0;
-        const quantity = parseFloat(line.unitats) || 0;
-        const discount = parseFloat(line.dte) || 0;
-        const vatRate = parseFloat(line.iva) || 0;
+        const unitPrice = parseFloat(line.preu_unitari?.replace(',', '.')) || 0;
+        const quantity = parseFloat(line.unitats?.replace(',', '.')) || 0;
+        const discount = parseFloat(line.dte?.replace(',', '.')) || 0;
+        const vatRate = parseFloat(line.iva?.replace(',', '.')) || 0;
         
         const netTotal = (unitPrice * quantity) * (1 - discount / 100);
         const vatAmount = netTotal * (vatRate / 100);
