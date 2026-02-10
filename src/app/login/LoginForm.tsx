@@ -53,15 +53,21 @@ export function LoginForm() {
     const inputPassword = data.password.trim();
 
     try {
-      // S'utilitza la pestanya 'usurais' segons la configuració del client
-      const url = `https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usurais`;
+      // Fem servir l'ID que sabem que funciona al seguiment: kltblqn245xln
+      // I la pestanya que m'has indicat: usurais
+      const url = `https://sheetdb.io/api/v1/kltblqn245xln?sheet=usurais`;
       const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error('No es pot connectar amb el servidor de dades.');
+        throw new Error('No es pot connectar amb el servidor de dades. Revisa l\'ID i la pestanya.');
       }
 
       const allUsers = await response.json();
+      
+      if (!Array.isArray(allUsers)) {
+          throw new Error('Format de dades incorrecte rebut de la base de dades.');
+      }
+
       const normalizedUsers = allUsers.map(normalizeUserData).filter(Boolean);
       
       const foundUser = normalizedUsers.find(
@@ -75,15 +81,20 @@ export function LoginForm() {
         const nom = foundUser.nom || foundUser.usuari || 'Usuari';
         const empresa = foundUser.empresa || 'Empresa No Definida';
         
+        // Guardem les dades al localStorage
         localStorage.setItem('userData', JSON.stringify({ nom, empresa }));
+        
+        // Forcem l'actualització del Header disparant un esdeveniment
+        window.dispatchEvent(new Event('storage'));
+        
         router.push('/dashboard');
       } else {
         setError('Dades incorrectes. Verifica el teu usuari i contrasenya.');
       }
 
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      setError('Error de connexió amb el servidor. Intenta-ho de nou més tard.');
+      setError('Error de connexió: ' + (e.message || 'Intenta-ho de nou més tard.'));
     } finally {
       setLoading(false);
     }

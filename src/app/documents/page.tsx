@@ -100,14 +100,15 @@ export default function DocumentsPage() {
       setLoading(true);
       setError(null);
       try {
-        // S'utilitzen les pestanyes 'usurais' i 'documents' segons la configuració del client
+        // Fem servir l'ID de SheetDB del seguiment i les pestanyes confirmades
+        const SHEET_ID = 'kltblqn245xln';
         const [usersRes, documentsRes] = await Promise.all([
-          fetch('https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=usurais'),
-          fetch('https://sheetdb.io/api/v1/kymb6tvlvb694?sheet=documents')
+          fetch(`https://sheetdb.io/api/v1/${SHEET_ID}?sheet=usurais`),
+          fetch(`https://sheetdb.io/api/v1/${SHEET_ID}?sheet=documents`)
         ]);
 
         if (!usersRes.ok || !documentsRes.ok) {
-          throw new Error('Error al connectar amb la base de dades. Revisa el nom de les pestanyes.');
+          throw new Error('Error al connectar amb la base de dades. Revisa l\'ID i els noms de les pestanyes (usurais, documents).');
         }
 
         const rawUsers = await usersRes.json();
@@ -119,11 +120,11 @@ export default function DocumentsPage() {
         setAllUsers(usersData);
         setAllDocuments(documentsData);
 
-        const currentUser = usersData.find((u: ApiUser) => u.usuari?.toLowerCase() === parsedData.nom?.toLowerCase());
-        setUserRole(currentUser ? currentUser.rol?.toLowerCase() : 'client');
+        const currentUser = usersData.find((u: ApiUser) => u.usuari?.toString().toLowerCase().trim() === parsedData.nom?.toString().toLowerCase().trim());
+        setUserRole(currentUser ? currentUser.rol?.toString().toLowerCase().trim() : 'client');
 
       } catch (e: any) {
-        setError(e.message || 'Ha ocorregut un error inesperat.');
+        setError(e.message || 'Ha ocorregut un error inesperat en carregar les dades.');
       } finally {
         setLoading(false);
       }
@@ -138,7 +139,7 @@ export default function DocumentsPage() {
     const isAdmin = ['admin', 'administrador', 'treballador'].includes(userRole);
     const filteredDocs = isAdmin
       ? allDocuments
-      : allDocuments.filter(doc => doc.usuari?.toLowerCase() === currentUserData.nom?.toLowerCase());
+      : allDocuments.filter(doc => doc.usuari?.toString().toLowerCase().trim() === currentUserData.nom?.toString().toLowerCase().trim());
 
     const invoicesMap = new Map<string, DocumentLine[]>();
     filteredDocs.forEach(line => {
@@ -153,15 +154,15 @@ export default function DocumentsPage() {
     const result: ProcessedInvoice[] = [];
     invoicesMap.forEach((lines, invoiceNumber) => {
       const firstLine = lines[0];
-      const clientData = allUsers.find(u => u.usuari?.toLowerCase() === firstLine.usuari?.toLowerCase()) || null;
+      const clientData = allUsers.find(u => u.usuari?.toString().toLowerCase().trim() === firstLine.usuari?.toString().toLowerCase().trim()) || null;
       let baseTotal = 0;
       const vatMap = new Map<number, { base: number; amount: number }>();
 
       const processedLines = lines.map(line => {
-        const unitPrice = parseFloat(line.preu_unitari?.replace(',', '.')) || 0;
-        const quantity = parseFloat(line.unitats?.replace(',', '.')) || 0;
-        const discount = parseFloat(line.dte?.replace(',', '.')) || 0;
-        const vatRate = parseFloat(line.iva?.replace(',', '.')) || 0;
+        const unitPrice = parseFloat(line.preu_unitari?.toString().replace(',', '.')) || 0;
+        const quantity = parseFloat(line.unitats?.toString().replace(',', '.')) || 0;
+        const discount = parseFloat(line.dte?.toString().replace(',', '.')) || 0;
+        const vatRate = parseFloat(line.iva?.toString().replace(',', '.')) || 0;
         
         const netTotal = (unitPrice * quantity) * (1 - discount / 100);
         const vatAmount = netTotal * (vatRate / 100);
@@ -217,9 +218,12 @@ export default function DocumentsPage() {
       <div className="container mx-auto px-4 py-16">
         <Alert variant="destructive" className="max-w-xl mx-auto">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>Error de Connexió</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
+        <div className="text-center mt-6">
+            <Button onClick={() => window.location.reload()}>Tornar a provar</Button>
+        </div>
       </div>
     );
   }
