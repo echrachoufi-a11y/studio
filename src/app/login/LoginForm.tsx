@@ -53,7 +53,8 @@ export function LoginForm() {
     const inputPassword = data.password.trim();
 
     try {
-      const url = `https://sheetdb.io/api/v1/kltblqn245xln?sheet=usurais`;
+      // Hem actualitzat la pestanya a 'usuaris'
+      const url = `https://sheetdb.io/api/v1/kltblqn245xln?sheet=usuaris`;
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -78,13 +79,16 @@ export function LoginForm() {
       if (foundUser) {
         const nom = foundUser.nom || foundUser.usuari || 'Usuari';
         const empresa = foundUser.empresa || 'Empresa No Definida';
-        const usuari = foundUser.usuari.toString().trim().toLowerCase();
+        const usuariIdentificador = foundUser.usuari.toString().trim().toLowerCase();
         
-        // Guardem les dades al localStorage incloent el camp 'usuari' per a cerques
-        localStorage.setItem('userData', JSON.stringify({ nom, empresa, usuari }));
+        // Guardem les dades incloent l'identificador d'usuari per al filtratge relacional
+        localStorage.setItem('userData', JSON.stringify({ 
+          nom, 
+          empresa, 
+          usuari: usuariIdentificador 
+        }));
         
         window.dispatchEvent(new Event('storage'));
-        
         router.push('/dashboard');
       } else {
         setError('Dades incorrectes. Verifica el teu usuari i contrasenya.');

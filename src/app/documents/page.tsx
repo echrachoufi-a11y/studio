@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Loader2, Printer, ArrowLeft, FileText, AlertCircle } from 'lucide-react';
+import { Loader2, Printer, ArrowLeft, FileText, AlertCircle, Info } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
@@ -103,12 +103,12 @@ export default function DocumentsPage() {
       try {
         const SHEET_ID = 'kltblqn245xln';
         const [usersRes, documentsRes] = await Promise.all([
-          fetch(`https://sheetdb.io/api/v1/${SHEET_ID}?sheet=usurais`),
+          fetch(`https://sheetdb.io/api/v1/${SHEET_ID}?sheet=usuaris`),
           fetch(`https://sheetdb.io/api/v1/${SHEET_ID}?sheet=documents`)
         ]);
 
         if (!usersRes.ok || !documentsRes.ok) {
-          throw new Error('Error al connectar amb la base de dades.');
+          throw new Error('Error de connexió amb SheetDB. Verifica el nom de les pestanyes.');
         }
 
         const rawUsers = await usersRes.json();
@@ -120,12 +120,12 @@ export default function DocumentsPage() {
         setAllUsers(usersData);
         setAllDocuments(documentsData);
 
-        // Busquem el rol fent servir el camp 'usuari' que ara és més precís
         const currentUser = usersData.find((u: ApiUser) => 
           u.usuari?.toString().toLowerCase().trim() === parsedData.usuari?.toString().toLowerCase().trim()
         );
         
-        setUserRole(currentUser ? currentUser.rol?.toString().toLowerCase().trim() : 'client');
+        const role = currentUser ? currentUser.rol?.toString().toLowerCase().trim() : 'client';
+        setUserRole(role);
 
       } catch (e: any) {
         setError(e.message || 'Error de connexió.');
@@ -142,7 +142,6 @@ export default function DocumentsPage() {
 
     const isAdmin = ['admin', 'administrador', 'treballador'].includes(userRole);
     
-    // Filtrem els documents pel nom d'usuari de l'Excel, no pel nom real
     const filteredDocs = isAdmin
       ? allDocuments
       : allDocuments.filter(doc => 
@@ -250,83 +249,99 @@ export default function DocumentsPage() {
           </Button>
         </div>
         
-        <Card id="zona-factura" className="w-full max-w-4xl mx-auto p-8 shadow-none border">
-            <header className="flex justify-between items-start pb-6 border-b">
+        <Card id="zona-factura" className="w-full max-w-4xl mx-auto p-12 shadow-none border">
+            <header className="flex justify-between items-start pb-8 border-b">
                 <div>
                     <Logo />
                     <div className="mt-4 text-xs text-muted-foreground">
-                        <p>Meridian Logistics S.L.</p>
+                        <p className="font-bold">Meridian Logistics S.L.</p>
                         <p>ESB12345678</p>
+                        <p>Puerto Principal, Nave 12</p>
                     </div>
                 </div>
                 <div className="text-right">
-                    <h2 className="text-3xl font-bold text-primary">FACTURA</h2>
-                    <p className="mt-1 font-medium">Nº: {invoice.invoiceNumber}</p>
+                    <h2 className="text-4xl font-bold text-primary">FACTURA</h2>
+                    <p className="mt-2 text-lg font-medium">Nº: {invoice.invoiceNumber}</p>
                     <p className="text-sm">Data: {new Date(invoice.date).toLocaleDateString('ca-ES')}</p>
                 </div>
             </header>
 
-            <section className="my-6">
-                <h3 className="text-sm font-semibold uppercase text-muted-foreground mb-2">Facturat a:</h3>
-                {client ? (
-                <div className="text-sm">
-                    <p className="font-bold">{client.empresa || client.usuari}</p>
-                    <p>NIF: {client.fiscalid}</p>
-                    <p>{client.adreca}</p>
-                    <p>Tel: {client.telefon}</p>
+            <section className="my-10 grid grid-cols-2 gap-8">
+                <div>
+                    <h3 className="text-xs font-semibold uppercase text-muted-foreground mb-3">Facturat a:</h3>
+                    {client ? (
+                    <div className="text-sm space-y-1">
+                        <p className="font-bold text-base">{client.empresa || client.usuari}</p>
+                        <p>NIF/CIF: <span className="font-medium">{client.fiscalid}</span></p>
+                        <p>{client.adreca}</p>
+                        <p>Tel: {client.telefon}</p>
+                    </div>
+                    ) : ( 
+                        <div className="text-sm p-3 bg-destructive/5 rounded border border-destructive/20">
+                            <p className="font-bold text-destructive">Atenció: Dades fiscals no trobades</p>
+                            <p className="text-xs">Usuari Excel: {invoice.clientUsername}</p>
+                        </div>
+                    )}
                 </div>
-                ) : ( <p className="text-sm text-destructive">Client: {invoice.clientUsername}</p>)}
+                <div className="text-right flex flex-col justify-end">
+                    <div className="text-sm text-muted-foreground">
+                        <p>Mètode de pagament: <span className="text-foreground font-medium">{invoice.paymentMethod}</span></p>
+                    </div>
+                </div>
             </section>
 
-            <Table>
-                <TableHeader>
-                <TableRow>
-                    <TableHead>Concepte</TableHead>
-                    <TableHead className="text-right">Preu</TableHead>
-                    <TableHead className="text-right">Uds.</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                </TableRow>
-                </TableHeader>
-                <TableBody>
-                {invoice.lines.map((line, index) => (
-                    <TableRow key={index}>
-                    <TableCell>
-                        <p className="font-medium">{line.concept}</p>
-                        <p className="text-xs text-muted-foreground">IVA: {line.vatRate}%</p>
-                    </TableCell>
-                    <TableCell className="text-right">{formatCurrency(line.unitPrice)}</TableCell>
-                    <TableCell className="text-right">{line.quantity}</TableCell>
-                    <TableCell className="text-right">{formatCurrency(line.netTotal)}</TableCell>
+            <div className="mb-8">
+                <Table>
+                    <TableHeader>
+                    <TableRow className="bg-muted/50 hover:bg-muted/50">
+                        <TableHead className="font-bold text-foreground">Descripció del servei</TableHead>
+                        <TableHead className="text-right font-bold text-foreground">Preu Unit.</TableHead>
+                        <TableHead className="text-right font-bold text-foreground">Unitats</TableHead>
+                        <TableHead className="text-right font-bold text-foreground">Total Net</TableHead>
                     </TableRow>
-                ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <TableBody>
+                    {invoice.lines.map((line, index) => (
+                        <TableRow key={index}>
+                        <TableCell className="py-4">
+                            <p className="font-medium">{line.concept}</p>
+                            <p className="text-[10px] text-muted-foreground">Tipus d'IVA aplicat: {line.vatRate}%</p>
+                        </TableCell>
+                        <TableCell className="text-right">{formatCurrency(line.unitPrice)}</TableCell>
+                        <TableCell className="text-right">{line.quantity}</TableCell>
+                        <TableCell className="text-right font-medium">{formatCurrency(line.netTotal)}</TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            </div>
             
-            <Separator className="my-6"/>
+            <Separator className="my-8"/>
 
             <div className="flex justify-end">
-                <div className="w-full max-w-xs space-y-2">
-                    <div className="flex justify-between text-sm">
-                        <span>Base Imposable</span>
-                        <span>{formatCurrency(invoice.baseTotal)}</span>
+                <div className="w-full max-w-sm space-y-3">
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>Base Imposable Total</span>
+                        <span className="text-foreground">{formatCurrency(invoice.baseTotal)}</span>
                     </div>
                     {invoice.vatBreakdown.map(vat => (
-                         <div key={vat.rate} className="flex justify-between text-sm">
-                            <span>IVA ({vat.rate}%)</span>
-                            <span>{formatCurrency(vat.amount)}</span>
+                         <div key={vat.rate} className="flex justify-between text-sm text-muted-foreground">
+                            <span>Quota IVA ({vat.rate}%) sobre {formatCurrency(vat.base)}</span>
+                            <span className="text-foreground">{formatCurrency(vat.amount)}</span>
                         </div>
                     ))}
-                    <div className="flex justify-between text-xl font-bold pt-2 border-t">
-                        <span>TOTAL</span>
+                    <div className="flex justify-between text-2xl font-bold pt-4 border-t-2 border-primary/20 text-primary">
+                        <span>TOTAL FACTURA</span>
                         <span>{formatCurrency(invoice.grandTotal)}</span>
                     </div>
                 </div>
             </div>
 
-            <footer className="mt-12 pt-6 border-t text-[10px] text-muted-foreground leading-tight space-y-2">
-                <p>Forma de pagament: {invoice.paymentMethod}</p>
-                <p>Meridian Logistics S.L. - Inscrita al Registre Mercantil de València.</p>
-                <p>De conformitat amb el RGPD, l'informem que les seves dades personals són tractades per Meridian Logistics S.L. per a la gestió comercial. Pot exercir els seus drets a contacte@meridianlogistics.com.</p>
+            <footer className="mt-16 pt-8 border-t text-[9px] text-muted-foreground leading-relaxed">
+                <div className="grid grid-cols-1 gap-4">
+                    <p><strong>Avís Legal i Protecció de Dades:</strong> En compliment del Reglament (UE) 2016/679 (RGPD), l'informem que les dades personals facilitades seran tractades per Meridian Logistics S.L. amb la finalitat de gestionar la relació comercial i administrativa. Pot exercir els seus drets d'accés, rectificació, supressió i altres previstos per la llei dirigint-se a contacte@meridianlogistics.com.</p>
+                    <p>Meridian Logistics S.L. - Registre Mercantil de València, Tom 12345, Foli 67, Full V-98765. Domicili Social: Puerto Principal, Nave 12, València, Espanya.</p>
+                </div>
             </footer>
         </Card>
       </div>
@@ -336,13 +351,17 @@ export default function DocumentsPage() {
   return (
     <div className="w-full bg-background py-16">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="mx-auto max-w-3xl text-center mb-12">
-          <h1 className="text-4xl font-bold">Els Meus Documents</h1>
-          <p className="mt-4 text-muted-foreground">Consulta i gestiona les teves factures.</p>
+        <div className="mx-auto max-w-4xl text-center mb-12">
+          <h1 className="text-4xl font-bold flex items-center justify-center gap-3">
+            <FileText className="h-10 w-10 text-primary" />
+            Els Meus Documents
+          </h1>
+          <p className="mt-4 text-lg text-muted-foreground">Gestiona i descarrega les teves factures oficials.</p>
           {userRole && (
-            <div className="mt-2">
-              <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                Mode: {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
+            <div className="mt-4">
+              <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary border border-primary/20">
+                <Info className="h-4 w-4" />
+                Mode d'accés: {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
               </span>
             </div>
           )}
@@ -351,30 +370,45 @@ export default function DocumentsPage() {
         {processedInvoices.length > 0 ? (
           <div className="mx-auto max-w-4xl grid gap-6">
             {processedInvoices.map(invoice => (
-              <Card key={invoice.invoiceNumber} className="hover:shadow-md transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <Card key={invoice.invoiceNumber} className="hover:shadow-lg transition-all border-l-4 border-l-primary">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-6">
                   <div className="space-y-1">
-                    <CardTitle className="text-xl flex items-center gap-2">
-                      <FileText className="h-5 w-5 text-primary" />
-                      Factura {invoice.invoiceNumber}
-                    </CardTitle>
-                    <CardDescription>
-                      Data: {new Date(invoice.date).toLocaleDateString('ca-ES')}
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Factura</span>
+                        <CardTitle className="text-2xl font-bold">{invoice.invoiceNumber}</CardTitle>
+                    </div>
+                    <CardDescription className="text-base">
+                      Data d'emissió: <span className="font-medium text-foreground">{new Date(invoice.date).toLocaleDateString('ca-ES')}</span>
                     </CardDescription>
                   </div>
-                  <Button onClick={() => setSelectedInvoice(invoice)}>Veure Detall</Button>
+                  <Button size="lg" onClick={() => setSelectedInvoice(invoice)} className="shadow-md">
+                    Veure Detall i Imprimir
+                  </Button>
                 </CardHeader>
-                <CardContent className="bg-muted/30 py-3 flex justify-between items-center rounded-b-lg px-6">
-                    <span className="text-sm font-medium">Client: {invoice.clientUsername}</span>
-                    <span className="text-lg font-bold text-primary">{formatCurrency(invoice.grandTotal)}</span>
+                <CardContent className="bg-muted/30 py-4 flex justify-between items-center rounded-b-lg px-8 border-t">
+                    <div className="flex flex-col">
+                        <span className="text-xs text-muted-foreground uppercase font-bold">Client Associat</span>
+                        <span className="text-sm font-semibold">{invoice.clientUsername}</span>
+                    </div>
+                    <div className="flex flex-col text-right">
+                        <span className="text-xs text-muted-foreground uppercase font-bold">Import Total</span>
+                        <span className="text-2xl font-black text-primary">{formatCurrency(invoice.grandTotal)}</span>
+                    </div>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">No s'han trobat documents.</p>
-          </div>
+          <Card className="mx-auto max-w-xl p-12 text-center border-dashed">
+            <div className="flex flex-col items-center gap-4">
+                <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center">
+                    <FileText className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <p className="text-xl font-medium text-muted-foreground">No s'han trobat documents per al teu compte.</p>
+                <p className="text-sm text-muted-foreground">Si creus que es tracta d'un error, contacta amb el suport tècnic.</p>
+                <Button variant="outline" onClick={() => router.push('/dashboard')}>Tornar al Panell</Button>
+            </div>
+          </Card>
         )}
       </div>
     </div>
