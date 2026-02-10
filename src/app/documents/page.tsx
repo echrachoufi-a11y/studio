@@ -13,6 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 interface UserData {
   nom: string;
   empresa: string;
+  usuari: string;
 }
 
 interface ApiUser {
@@ -93,14 +94,13 @@ export default function DocumentsPage() {
       router.push('/login');
       return;
     }
-    const parsedData = JSON.parse(storedData);
+    const parsedData: UserData = JSON.parse(storedData);
     setCurrentUserData(parsedData);
 
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        // Fem servir l'ID de SheetDB del seguiment i les pestanyes confirmades
         const SHEET_ID = 'kltblqn245xln';
         const [usersRes, documentsRes] = await Promise.all([
           fetch(`https://sheetdb.io/api/v1/${SHEET_ID}?sheet=usurais`),
@@ -108,7 +108,7 @@ export default function DocumentsPage() {
         ]);
 
         if (!usersRes.ok || !documentsRes.ok) {
-          throw new Error('Error al connectar amb la base de dades. Revisa l\'ID i els noms de les pestanyes (usurais, documents).');
+          throw new Error('Error al connectar amb la base de dades.');
         }
 
         const rawUsers = await usersRes.json();
@@ -120,11 +120,15 @@ export default function DocumentsPage() {
         setAllUsers(usersData);
         setAllDocuments(documentsData);
 
-        const currentUser = usersData.find((u: ApiUser) => u.usuari?.toString().toLowerCase().trim() === parsedData.nom?.toString().toLowerCase().trim());
+        // Busquem el rol fent servir el camp 'usuari' que ara és més precís
+        const currentUser = usersData.find((u: ApiUser) => 
+          u.usuari?.toString().toLowerCase().trim() === parsedData.usuari?.toString().toLowerCase().trim()
+        );
+        
         setUserRole(currentUser ? currentUser.rol?.toString().toLowerCase().trim() : 'client');
 
       } catch (e: any) {
-        setError(e.message || 'Ha ocorregut un error inesperat en carregar les dades.');
+        setError(e.message || 'Error de connexió.');
       } finally {
         setLoading(false);
       }
@@ -137,9 +141,13 @@ export default function DocumentsPage() {
     if (!currentUserData || !userRole) return [];
 
     const isAdmin = ['admin', 'administrador', 'treballador'].includes(userRole);
+    
+    // Filtrem els documents pel nom d'usuari de l'Excel, no pel nom real
     const filteredDocs = isAdmin
       ? allDocuments
-      : allDocuments.filter(doc => doc.usuari?.toString().toLowerCase().trim() === currentUserData.nom?.toString().toLowerCase().trim());
+      : allDocuments.filter(doc => 
+          doc.usuari?.toString().toLowerCase().trim() === currentUserData.usuari?.toString().toLowerCase().trim()
+        );
 
     const invoicesMap = new Map<string, DocumentLine[]>();
     filteredDocs.forEach(line => {
@@ -331,6 +339,13 @@ export default function DocumentsPage() {
         <div className="mx-auto max-w-3xl text-center mb-12">
           <h1 className="text-4xl font-bold">Els Meus Documents</h1>
           <p className="mt-4 text-muted-foreground">Consulta i gestiona les teves factures.</p>
+          {userRole && (
+            <div className="mt-2">
+              <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+                Mode: {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
+              </span>
+            </div>
+          )}
         </div>
 
         {processedInvoices.length > 0 ? (

@@ -53,19 +53,17 @@ export function LoginForm() {
     const inputPassword = data.password.trim();
 
     try {
-      // Fem servir l'ID que sabem que funciona al seguiment: kltblqn245xln
-      // I la pestanya que m'has indicat: usurais
       const url = `https://sheetdb.io/api/v1/kltblqn245xln?sheet=usurais`;
       const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error('No es pot connectar amb el servidor de dades. Revisa l\'ID i la pestanya.');
+        throw new Error('No es pot connectar amb el servidor de dades.');
       }
 
       const allUsers = await response.json();
       
       if (!Array.isArray(allUsers)) {
-          throw new Error('Format de dades incorrecte rebut de la base de dades.');
+          throw new Error('Format de dades incorrecte.');
       }
 
       const normalizedUsers = allUsers.map(normalizeUserData).filter(Boolean);
@@ -80,11 +78,11 @@ export function LoginForm() {
       if (foundUser) {
         const nom = foundUser.nom || foundUser.usuari || 'Usuari';
         const empresa = foundUser.empresa || 'Empresa No Definida';
+        const usuari = foundUser.usuari.toString().trim().toLowerCase();
         
-        // Guardem les dades al localStorage
-        localStorage.setItem('userData', JSON.stringify({ nom, empresa }));
+        // Guardem les dades al localStorage incloent el camp 'usuari' per a cerques
+        localStorage.setItem('userData', JSON.stringify({ nom, empresa, usuari }));
         
-        // Forcem l'actualització del Header disparant un esdeveniment
         window.dispatchEvent(new Event('storage'));
         
         router.push('/dashboard');
