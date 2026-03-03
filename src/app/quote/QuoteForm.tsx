@@ -25,69 +25,69 @@ export function QuoteForm() {
   useEffect(() => {
     if (state.succeeded) {
       toast({
-        title: 'Cotización Enviada',
-        description: 'Su solicitud ha sido recibida. Nos pondremos en contacto pronto.',
+        title: 'Cotització Enviada',
+        description: 'Hem rebut la teva sol·licitud. Ens posarem en contacte amb tu ben aviat.',
       });
     } else if (state.errors) {
        toast({
         title: 'Error',
-        description: 'Hubo un problema al enviar su solicitud. Inténtelo de nuevo.',
+        description: 'Hi ha hagut un problema al enviar la teva sol·licitud. Torna-ho a intentar.',
         variant: 'destructive',
       });
     }
-  }, [state, toast]);
+  }, [state.succeeded, state.errors, toast]);
 
   return (
-    <Card>
+    <Card className="shadow-lg border-primary/10">
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
-           <input type="hidden" name="_subject" value="Nueva Solicitud de Cotización" />
+           <input type="hidden" name="_subject" value="Nova Sol·licitud de Cotització - Meridian Logistics" />
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="name">Nombre Completo</Label>
-                <Input id="name" name="name" placeholder="Ej: Juan Pérez" required />
+                <Label htmlFor="name">Nom Complet</Label>
+                <Input id="name" name="name" placeholder="Ex: Joan Pere" required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="company">Empresa (Opcional)</Label>
-                <Input id="company" name="company" placeholder="Ej: Importaciones Global S.A." />
+                <Input id="company" name="company" placeholder="Ex: Importacions Globals S.A." />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" placeholder="ejemplo@correo.com" required />
+                <Input id="email" name="email" type="email" placeholder="exemple@correu.com" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Teléfono</Label>
-                <Input id="phone" name="phone" placeholder="+1 (555) 123-4567" required />
+                <Label htmlFor="phone">Telèfon</Label>
+                <Input id="phone" name="phone" placeholder="+34 600 000 000" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="origin">Ciudad/Puerto de Origen</Label>
-                <Input id="origin" name="origin" placeholder="Ej: Shanghai, China" required />
+                <Label htmlFor="origin">Ciutat/Port d'Origen</Label>
+                <Input id="origin" name="origin" placeholder="Ex: Shanghai, Xina" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="destination">Ciudad/Puerto de Destino</Label>
-                <Input id="destination" name="destination" placeholder="Ej: Valencia, España" required />
+                <Label htmlFor="destination">Ciutat/Port de Destí</Label>
+                <Input id="destination" name="destination" placeholder="Ex: Barcelona, Espanya" required />
               </div>
             </div>
              <div className="space-y-2">
-                <Label htmlFor="shipmentType">Tipo de Envío</Label>
+                <Label htmlFor="shipmentType">Tipus d'Enviament</Label>
                 <Select name="shipmentType" defaultValue="FCL">
                     <SelectTrigger id="shipmentType">
-                        <SelectValue placeholder="Seleccione un tipo de envío" />
+                        <SelectValue placeholder="Selecciona un tipus d'enviament" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="FCL">Contenedor Completo (FCL)</SelectItem>
-                      <SelectItem value="LCL">Carga Consolidada (LCL)</SelectItem>
-                      <SelectItem value="Bulk">Carga a Granel (Bulk)</SelectItem>
-                      <SelectItem value="Terrestre">Transporte Terrestre</SelectItem>
+                      <SelectItem value="FCL">Contenidor Complet (FCL)</SelectItem>
+                      <SelectItem value="LCL">Càrrega Consolidada (LCL)</SelectItem>
+                      <SelectItem value="Bulk">Càrrega a Granel (Bulk)</SelectItem>
+                      <SelectItem value="Terrestre">Transport Terrestre</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="cargoDetails">Detalles de la Carga</Label>
+                <Label htmlFor="cargoDetails">Detalls de la Càrrega</Label>
                 <Textarea
                     id="cargoDetails"
                     name="cargoDetails"
-                    placeholder="Describa su mercancía, dimensiones, peso, y cualquier requerimiento especial."
+                    placeholder="Descriu la teva mercaderia, dimensions, pes i qualsevol requeriment especial."
                     className="min-h-[120px]"
                     required
                 />
@@ -96,11 +96,11 @@ export function QuoteForm() {
               {state.submitting ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Enviando...
+                  Enviant...
                 </>
               ) : (
                 <>
-                  Enviar Solicitud <ArrowRight className="ml-2 h-5 w-5" />
+                  Enviar Sol·licitud <ArrowRight className="ml-2 h-5 w-5" />
                 </>
               )}
             </Button>

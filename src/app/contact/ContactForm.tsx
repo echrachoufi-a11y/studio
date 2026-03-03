@@ -25,13 +25,13 @@ export function ContactForm() {
     useEffect(() => {
         if (state.succeeded) {
             toast({
-                title: 'Mensaje Enviado',
-                description: 'Gracias por contactarnos. Le responderemos a la brevedad.',
+                title: 'Missatge Enviat',
+                description: 'Gràcies per contactar amb nosaltres. Et respondrem el més aviat possible.',
             });
         } else if (state.errors) {
             toast({
-                title: 'Error al enviar',
-                description: 'Hubo un problema al enviar el formulario. Por favor, inténtelo de nuevo.',
+                title: 'Error en l\'enviament',
+                description: 'Hi ha hagut un problema al enviar el formulari. Si us plau, torna-ho a intentar.',
                 variant: 'destructive',
             });
         }
@@ -39,39 +39,39 @@ export function ContactForm() {
 
 
   return (
-    <Card>
+    <Card className="shadow-lg border-primary/10">
       <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="name">Su Nombre</Label>
-                    <Input id="name" name="name" placeholder="Ej: Ana García" required />
+                    <Label htmlFor="name">El teu Nom</Label>
+                    <Input id="name" name="name" placeholder="Ex: Anna García" required />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="email">Su Email</Label>
-                    <Input id="email" name="email" type="email" placeholder="ejemplo@correo.com" required />
+                    <Label htmlFor="email">El teu Email</Label>
+                    <Input id="email" name="email" type="email" placeholder="exemple@correu.com" required />
                 </div>
             </div>
              <div className="space-y-2">
-                <Label htmlFor="subject">Asunto</Label>
+                <Label htmlFor="subject">Assumpte</Label>
                 <Select name="subject" defaultValue="Consulta General">
                     <SelectTrigger id="subject">
-                        <SelectValue placeholder="Seleccione un asunto" />
+                        <SelectValue placeholder="Selecciona un assumpte" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Consulta General">Consulta General</SelectItem>
-                      <SelectItem value="Soporte">Soporte Técnico</SelectItem>
-                      <SelectItem value="Ventas">Consultas de Ventas</SelectItem>
-                      <SelectItem value="Otro">Otro</SelectItem>
+                      <SelectItem value="Suport">Suport Tècnic</SelectItem>
+                      <SelectItem value="Vendes">Consultes de Vendes</SelectItem>
+                      <SelectItem value="Altre">Altre</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="message">Su Mensaje</Label>
+                <Label htmlFor="message">El teu Missatge</Label>
                 <Textarea
                     id="message"
                     name="message"
-                    placeholder="Escriba su consulta aquí..."
+                    placeholder="Escriu la teva consulta aquí..."
                     className="min-h-[150px]"
                     required
                     minLength={10}
@@ -81,11 +81,11 @@ export function ContactForm() {
               {state.submitting ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Enviando...
+                  Enviant...
                 </>
               ) : (
                 <>
-                  Enviar Mensaje <Send className="ml-2 h-5 w-5" />
+                  Enviar Missatge <Send className="ml-2 h-5 w-5" />
                 </>
               )}
             </Button>
