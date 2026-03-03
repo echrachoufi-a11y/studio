@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Menu, User, LogOut, LayoutDashboard, Package } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -112,6 +112,12 @@ export function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link href="/booking" className="cursor-pointer">
+                    <Package className="mr-2 h-4 w-4" />
+                    Les meves Reserves
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/documents" className="cursor-pointer">
                     <Menu className="mr-2 h-4 w-4" />
                     Les meves Factures
@@ -167,6 +173,9 @@ export function Header() {
                    <>
                     <Button asChild variant="outline" className="justify-start">
                       <Link href="/dashboard">Àrea de Client ({userData.nom})</Link>
+                    </Button>
+                    <Button asChild variant="outline" className="justify-start">
+                      <Link href="/booking">Les meves Reserves</Link>
                     </Button>
                     <Button onClick={handleLogout} variant="destructive">
                       Tancar Sessió
